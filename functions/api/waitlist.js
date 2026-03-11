@@ -1,9 +1,22 @@
-export async function onRequestPost(context) {
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': 'https://betterbackgammon.com',
+const ALLOWED_ORIGINS = [
+  'https://betterbackgammon.com',
+  'https://www.betterbackgammon.com',
+];
+
+function getCorsHeaders(request) {
+  const origin = request.headers.get('Origin') || '';
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) || origin.endsWith('.pages.dev')
+    ? origin
+    : ALLOWED_ORIGINS[0];
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
+}
+
+export async function onRequestPost(context) {
+  const corsHeaders = getCorsHeaders(context.request);
 
   try {
     const { email } = await context.request.json();
@@ -47,14 +60,10 @@ export async function onRequestPost(context) {
   }
 }
 
-export async function onRequestOptions() {
+export async function onRequestOptions(context) {
+  const corsHeaders = getCorsHeaders(context.request);
   return new Response(null, {
     status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': 'https://betterbackgammon.com',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Max-Age': '86400',
-    },
+    headers: { ...corsHeaders, 'Access-Control-Max-Age': '86400' },
   });
 }
