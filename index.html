@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Better Backgammon — Master the Game You Love</title>
+  <meta name="description" content="Targeted backgammon drills, cube decisions, and AI coaching that make you measurably better. iOS app coming soon.">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#2D2D2D">
+  <meta property="og:title" content="Better Backgammon — Master the Game You Love">
+  <meta property="og:description" content="Targeted backgammon drills, cube decisions, and AI coaching that make you measurably better.">
+  <meta property="og:image" content="https://betterbackgammon.com/og-image.png">
+  <meta property="og:url" content="https://betterbackgammon.com">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    :root {
+      --tan: #D4B877;
+      --tan-light: #E8D5A8;
+      --tan-dark: #B89B5E;
+      --orange: #E8853A;
+      --orange-dark: #C96E2A;
+      --dark: #2D2D2D;
+      --darker: #1A1A1A;
+      --cream: #F5F0E0;
+      --cream-light: #FAF7EF;
+      --white: #FFFFFF;
+      --text: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --link: #E8853A;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text);
+      background: var(--darker);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; height: 48px;
+      background: rgba(26, 26, 26, 0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-inner {
+      width: 100%; max-width: 980px; padding: 0 22px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 15px; font-weight: 700; color: var(--tan);
+      text-decoration: none; letter-spacing: -0.02em;
+    }
+    nav ul { list-style: none; display: flex; gap: 28px; }
+    nav ul a {
+      font-size: 12px; font-weight: 400; color: rgba(212, 184, 119, 0.6);
+      text-decoration: none; transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--tan); }
+    .nav-cta {
+      font-size: 12px; font-weight: 500; color: var(--darker);
+      background: var(--tan); padding: 5px 14px; border-radius: 16px;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--tan-light); }
+
+    /* FADE-UP ANIMATION */
+    .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up-d1 { transition-delay: 0.12s; }
+    .fade-up-d2 { transition-delay: 0.24s; }
+    .fade-up-d3 { transition-delay: 0.36s; }
+    .fade-up-d4 { transition-delay: 0.48s; }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 120px 22px 80px;
+      background: radial-gradient(ellipse at 50% 30%, rgba(212,184,119,0.12) 0%, transparent 60%),
+                  linear-gradient(180deg, var(--darker) 0%, #111 100%);
+    }
+    .hero-icon {
+      width: 80px; height: 80px; border-radius: 20px;
+      margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .eyebrow {
+      font-size: 14px; font-weight: 600; color: var(--orange);
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px;
+    }
+    #hero h1 {
+      font-size: 64px; font-weight: 700; letter-spacing: -0.04em;
+      line-height: 1.05; color: var(--cream);
+      max-width: 700px; margin-bottom: 20px;
+    }
+    .hero-sub {
+      font-size: 21px; font-weight: 400; color: rgba(245,240,224,0.6);
+      line-height: 1.4; max-width: 520px; margin-bottom: 36px;
+    }
+
+    /* WAITLIST FORM */
+    .waitlist-form {
+      display: flex; gap: 8px; max-width: 420px; width: 100%;
+    }
+    .waitlist-form input {
+      flex: 1; height: 48px; border-radius: 12px;
+      border: 1px solid rgba(212,184,119,0.2); background: rgba(255,255,255,0.06);
+      padding: 0 16px; font-size: 16px; color: var(--cream);
+      outline: none; transition: border-color 0.2s;
+    }
+    .waitlist-form input::placeholder { color: rgba(245,240,224,0.3); }
+    .waitlist-form input:focus { border-color: var(--tan); }
+    .btn-tan {
+      height: 48px; padding: 0 24px; border: none; border-radius: 12px;
+      background: var(--tan); color: var(--darker); font-size: 16px;
+      font-weight: 600; cursor: pointer; white-space: nowrap;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-tan:hover { background: var(--tan-light); }
+    .btn-tan:active { transform: scale(0.97); }
+    .waitlist-msg {
+      font-size: 14px; color: rgba(245,240,224,0.4); margin-top: 14px;
+      min-height: 20px;
+    }
+    .waitlist-msg.success { color: #30d158; }
+    .waitlist-msg.error { color: #ff453a; }
+    .hero-fine {
+      font-size: 13px; color: rgba(245,240,224,0.3); margin-top: 8px;
+    }
+
+    /* ANNOUNCE STRIP */
+    #announce {
+      background: var(--dark); border-top: 1px solid rgba(212,184,119,0.1);
+      border-bottom: 1px solid rgba(212,184,119,0.1);
+      padding: 28px 22px;
+    }
+    .strip-inner {
+      max-width: 980px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .strip-item { text-align: center; }
+    .strip-val {
+      font-size: 28px; font-weight: 700; color: var(--tan);
+      letter-spacing: -0.02em;
+    }
+    .strip-label {
+      font-size: 12px; font-weight: 500; color: rgba(245,240,224,0.4);
+      margin-top: 4px; letter-spacing: 0.02em;
+    }
+    .strip-div { width: 1px; height: 32px; background: rgba(212,184,119,0.15); }
+
+    /* STORY SECTIONS */
+    .story-section { padding: 100px 22px; }
+    .story-section.dark { background: var(--darker); }
+    .story-section.tan { background: var(--cream-light); }
+    .story-section.board { background: var(--dark); }
+    .story-inner {
+      max-width: 980px; margin: 0 auto;
+    }
+    .story-center { text-align: center; }
+    .story-eyebrow {
+      font-size: 14px; font-weight: 600; color: var(--orange);
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .story-h2 {
+      font-size: 48px; font-weight: 700; letter-spacing: -0.04em;
+      line-height: 1.08; margin-bottom: 16px;
+    }
+    .story-h3 {
+      font-size: 40px; font-weight: 700; letter-spacing: -0.03em;
+      line-height: 1.1; margin-bottom: 16px;
+    }
+    .story-section.dark .story-h2,
+    .story-section.dark .story-h3,
+    .story-section.board .story-h2,
+    .story-section.board .story-h3 { color: var(--cream); }
+    .story-section.tan .story-h2,
+    .story-section.tan .story-h3 { color: var(--dark); }
+    .story-body {
+      font-size: 19px; line-height: 1.47; max-width: 600px;
+      margin: 0 auto 48px;
+    }
+    .story-section.dark .story-body,
+    .story-section.board .story-body { color: rgba(245,240,224,0.6); }
+    .story-section.tan .story-body { color: var(--text-secondary); }
+    .story-p {
+      font-size: 17px; line-height: 1.47;
+    }
+    .story-section.dark .story-p,
+    .story-section.board .story-p { color: rgba(245,240,224,0.55); }
+    .story-section.tan .story-p { color: var(--text-secondary); }
+
+    /* SPLIT LAYOUT */
+    .story-split {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    .story-split.flip .story-text { order: 2; }
+
+    /* FEATURE CARDS */
+    .feat-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px; margin-top: 48px;
+    }
+    .feat-card {
+      background: rgba(212,184,119,0.06);
+      border: 1px solid rgba(212,184,119,0.1);
+      border-radius: 20px; padding: 28px 24px;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .feat-card:hover {
+      border-color: rgba(212,184,119,0.25);
+      transform: translateY(-2px);
+    }
+    .feat-card-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 16px;
+    }
+    .feat-card h4 {
+      font-size: 17px; font-weight: 600; color: var(--cream);
+      margin-bottom: 8px; letter-spacing: -0.01em;
+    }
+    .feat-card p {
+      font-size: 14px; line-height: 1.47; color: rgba(245,240,224,0.5);
+    }
+
+    /* VISUAL MOCKUPS */
+    .drill-visual {
+      background: linear-gradient(180deg, #1C1C1E, #0F0F10);
+      border-radius: 24px; padding: 24px;
+      border: 1px solid rgba(212,184,119,0.08);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+    .equity-visual {
+      background: var(--white); border-radius: 24px; padding: 24px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+
+    /* BOARD MOCKUP */
+    .board-mockup {
+      width: 100%; aspect-ratio: 1.4; border-radius: 16px;
+      background: linear-gradient(135deg, #8B6914, #6B4E10);
+      position: relative; overflow: hidden;
+      border: 2px solid rgba(212,184,119,0.3);
+    }
+    .board-points {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      display: flex; justify-content: space-around; padding: 0 8px;
+    }
+    .board-point {
+      width: 0; height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+    }
+    .board-point.orange { border-bottom: 60px solid var(--orange); }
+    .board-point.tan { border-bottom: 60px solid var(--tan); }
+
+    /* HOW IT WORKS */
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .step-cell {
+      text-align: center; padding: 32px 16px;
+    }
+    .step-num {
+      font-size: 48px; font-weight: 800; color: var(--tan);
+      opacity: 0.3; margin-bottom: 16px;
+      font-family: 'SF Mono', 'Menlo', monospace;
+    }
+    .step-cell h4 {
+      font-size: 17px; font-weight: 600; margin-bottom: 8px;
+    }
+    .step-cell p {
+      font-size: 14px; line-height: 1.47;
+    }
+    .story-section.dark .step-cell h4 { color: var(--cream); }
+    .story-section.dark .step-cell p { color: rgba(245,240,224,0.5); }
+    .story-section.tan .step-cell h4 { color: var(--dark); }
+    .story-section.tan .step-cell p { color: var(--text-secondary); }
+
+    /* TESTIMONIAL */
+    #manifesto {
+      background: var(--dark);
+      padding: 80px 22px;
+      text-align: center;
+    }
+    .manifesto-inner { max-width: 700px; margin: 0 auto; }
+    .manifesto-q {
+      font-size: 28px; font-weight: 600; letter-spacing: -0.02em;
+      line-height: 1.3; color: var(--cream);
+    }
+    .manifesto-q em {
+      font-style: normal; color: var(--tan);
+    }
+    .manifesto-attr {
+      font-size: 14px; color: rgba(245,240,224,0.4);
+      margin-top: 20px;
+    }
+
+    /* CTA */
+    #cta-section {
+      padding: 100px 22px;
+      text-align: center;
+      background: radial-gradient(ellipse at 50% 60%, rgba(232,133,58,0.1) 0%, transparent 60%),
+                  linear-gradient(180deg, var(--darker), #111);
+    }
+    .cta-inner { max-width: 600px; margin: 0 auto; }
+    #cta-section h2 {
+      font-size: 48px; font-weight: 700; letter-spacing: -0.04em;
+      line-height: 1.08; color: var(--cream); margin-bottom: 16px;
+    }
+    .cta-sub {
+      font-size: 19px; color: rgba(245,240,224,0.6);
+      line-height: 1.4; margin-bottom: 32px;
+    }
+    .cta-fine {
+      font-size: 13px; color: rgba(245,240,224,0.3); margin-top: 16px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--darker);
+      border-top: 1px solid rgba(212,184,119,0.08);
+      padding: 20px 22px;
+    }
+    .footer-inner {
+      max-width: 980px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy {
+      font-size: 12px; color: rgba(245,240,224,0.3);
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 12px; color: rgba(245,240,224,0.4);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--tan); }
+
+    /* RESPONSIVE */
+    @media (max-width: 734px) {
+      #hero h1 { font-size: 40px; }
+      .hero-sub { font-size: 18px; }
+      .waitlist-form { flex-direction: column; }
+      .story-h2 { font-size: 32px; }
+      .story-h3 { font-size: 28px; }
+      .story-split { grid-template-columns: 1fr; gap: 40px; }
+      .story-split.flip .story-text { order: 0; }
+      .feat-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr 1fr; }
+      .strip-inner { gap: 24px; }
+      .strip-div { display: none; }
+      nav ul { gap: 16px; }
+      #cta-section h2 { font-size: 32px; }
+      .manifesto-q { font-size: 22px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Better Backgammon</a>
+    <ul>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="/support.html">Support</a></li>
+    </ul>
+    <a href="#cta-section" class="nav-cta">Join Waitlist</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <img src="/apple-touch-icon.png" alt="Better Backgammon" class="hero-icon fade-up">
+  <p class="eyebrow fade-up fade-up-d1">Coming Soon to iOS</p>
+  <h1 class="fade-up fade-up-d2">Master the game<br/>you love.</h1>
+  <p class="hero-sub fade-up fade-up-d3">Targeted drills, cube decisions, and AI coaching that make you measurably better at backgammon.</p>
+  <form class="waitlist-form fade-up fade-up-d3" id="hero-waitlist" onsubmit="return handleWaitlist(event, this)">
+    <input type="email" name="email" placeholder="Enter your email" required autocomplete="email" />
+    <button type="submit" class="btn-tan">Join the Waitlist</button>
+  </form>
+  <p class="waitlist-msg fade-up fade-up-d3" id="hero-waitlist-msg">Be the first to know when we launch.</p>
+  <p class="hero-fine fade-up fade-up-d4">Free to download &middot; iOS 17+ &middot; Launching 2026</p>
+</section>
+
+<!-- ANNOUNCE STRIP -->
+<div id="announce">
+  <div class="strip-inner">
+    <div class="strip-item fade-up">
+      <div class="strip-val">5+</div>
+      <div class="strip-label">Drill categories</div>
+    </div>
+    <div class="strip-div"></div>
+    <div class="strip-item fade-up fade-up-d1">
+      <div class="strip-val">Daily</div>
+      <div class="strip-label">Cube challenges</div>
+    </div>
+    <div class="strip-div"></div>
+    <div class="strip-item fade-up fade-up-d2">
+      <div class="strip-val">GNU</div>
+      <div class="strip-label">Equity analysis</div>
+    </div>
+    <div class="strip-div"></div>
+    <div class="strip-item fade-up fade-up-d3">
+      <div class="strip-val">AI</div>
+      <div class="strip-label">Coaching built in</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1 — Drills -->
+<section id="features" class="story-section dark">
+  <div class="story-inner">
+    <div class="story-split fade-up">
+      <div class="story-text">
+        <p class="story-eyebrow">Targeted Drills</p>
+        <h2 class="story-h3">Practice the moves<br/>that matter.</h2>
+        <p class="story-p">Opening rolls, cube decisions, pip counting, bear-off technique, and positional strategy — each drill designed to build the specific skills that separate good players from great ones.</p>
+      </div>
+      <div class="drill-visual fade-up fade-up-d1">
+        <!-- Drill module cards mimicking iOS app -->
+        <div style="margin-bottom:16px;">
+          <div style="font-size:11px;font-weight:600;color:rgba(245,240,224,0.4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Drill Modules</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="background:rgba(232,133,58,0.1);border:1px solid rgba(232,133,58,0.15);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#E8853A,#C96E2A);display:flex;align-items:center;justify-content:center;font-size:16px;">🎲</div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:600;color:var(--cream);letter-spacing:-0.01em;">Opening Rolls</div>
+              <div style="font-size:11px;color:rgba(245,240,224,0.4);margin-top:2px;">24 positions &middot; Beginner</div>
+            </div>
+            <div style="font-size:12px;font-weight:700;font-family:'SF Mono','Menlo',monospace;color:#30d158;">85%</div>
+          </div>
+          <div style="background:rgba(212,184,119,0.06);border:1px solid rgba(212,184,119,0.1);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#D4B877,#B89B5E);display:flex;align-items:center;justify-content:center;font-size:16px;">📦</div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:600;color:var(--cream);letter-spacing:-0.01em;">Cube Decisions</div>
+              <div style="font-size:11px;color:rgba(245,240,224,0.4);margin-top:2px;">36 positions &middot; Intermediate</div>
+            </div>
+            <div style="font-size:12px;font-weight:700;font-family:'SF Mono','Menlo',monospace;color:#ff9f0a;">62%</div>
+          </div>
+          <div style="background:rgba(212,184,119,0.06);border:1px solid rgba(212,184,119,0.1);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#5E5CE6,#4A48B8);display:flex;align-items:center;justify-content:center;font-size:16px;">🔢</div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:600;color:var(--cream);letter-spacing:-0.01em;">Pip Counting</div>
+              <div style="font-size:11px;color:rgba(245,240,224,0.4);margin-top:2px;">Speed drills &middot; All levels</div>
+            </div>
+            <div style="font-size:12px;font-weight:700;font-family:'SF Mono','Menlo',monospace;color:#0071e3;">New</div>
+          </div>
+          <div style="background:rgba(212,184,119,0.06);border:1px solid rgba(212,184,119,0.1);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#30D158,#28A745);display:flex;align-items:center;justify-content:center;font-size:16px;">🏁</div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:600;color:var(--cream);letter-spacing:-0.01em;">Bear-Off Technique</div>
+              <div style="font-size:11px;color:rgba(245,240,224,0.4);margin-top:2px;">18 positions &middot; Advanced</div>
+            </div>
+            <div style="font-size:12px;font-weight:700;font-family:'SF Mono','Menlo',monospace;color:#ff453a;">41%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2 — Equity Analysis -->
+<section class="story-section tan">
+  <div class="story-inner">
+    <div class="story-split flip fade-up">
+      <div class="story-text">
+        <p class="story-eyebrow">Equity Reveal</p>
+        <h2 class="story-h3">See why the right<br/>move is right.</h2>
+        <p class="story-p">Powered by GNU Backgammon analysis, every drill shows you the equity difference between your choice and the optimal play. Not just "wrong" — but exactly how wrong, and why.</p>
+      </div>
+      <div class="equity-visual fade-up fade-up-d1">
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px;">Position Analysis</div>
+        <!-- Equity bar visualization -->
+        <div style="margin-bottom:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+            <span style="font-size:13px;font-weight:600;color:var(--dark);">Your move: 13/7, 8/7</span>
+            <span style="font-size:14px;font-weight:800;font-family:'SF Mono','Menlo',monospace;color:#ff453a;">-0.087</span>
+          </div>
+          <div style="height:8px;border-radius:4px;background:#f2f2f7;overflow:hidden;">
+            <div style="height:100%;width:72%;background:linear-gradient(90deg,#ff453a,#ff6b6b);border-radius:4px;"></div>
+          </div>
+        </div>
+        <div style="margin-bottom:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+            <span style="font-size:13px;font-weight:600;color:#30d158;">Best: 24/18, 13/7</span>
+            <span style="font-size:14px;font-weight:800;font-family:'SF Mono','Menlo',monospace;color:#30d158;">+0.142</span>
+          </div>
+          <div style="height:8px;border-radius:4px;background:#f2f2f7;overflow:hidden;">
+            <div style="height:100%;width:89%;background:linear-gradient(90deg,#30d158,#4ade80);border-radius:4px;"></div>
+          </div>
+        </div>
+        <div style="background:#f2f2f7;border-radius:12px;padding:12px 14px;">
+          <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;">Equity Difference</div>
+          <div style="font-size:24px;font-weight:800;font-family:'SF Mono','Menlo',monospace;color:#ff453a;letter-spacing:-0.02em;">-0.229</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">A significant error — splitting the back checkers was critical here.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 — AI Coaching -->
+<section class="story-section dark">
+  <div class="story-inner">
+    <div class="story-split fade-up">
+      <div class="story-text">
+        <p class="story-eyebrow">AI Coaching</p>
+        <h2 class="story-h3">A guru in<br/>your pocket.</h2>
+        <p class="story-p">Ask why a position is strong, explore alternative strategies, or get personalized advice based on your drill history. Coaching that adapts to how you actually play.</p>
+      </div>
+      <div class="drill-visual fade-up fade-up-d1" style="padding:20px;">
+        <!-- Chat mockup -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="align-self:flex-end;background:rgba(232,133,58,0.15);border:1px solid rgba(232,133,58,0.2);border-radius:16px 16px 4px 16px;padding:10px 14px;max-width:80%;">
+            <div style="font-size:13px;color:var(--cream);line-height:1.4;">Why is splitting better than slotting here?</div>
+          </div>
+          <div style="align-self:flex-start;background:rgba(212,184,119,0.08);border:1px solid rgba(212,184,119,0.12);border-radius:16px 16px 16px 4px;padding:10px 14px;max-width:85%;">
+            <div style="font-size:13px;color:rgba(245,240,224,0.8);line-height:1.5;">Great question. With this roll, splitting to the 18-point creates <span style="color:var(--tan);font-weight:600;">two anchoring chances</span> in your opponent's home board. Slotting the 7-point is aggressive but leaves a direct shot — and you're behind in the race by <span style="font-family:'SF Mono','Menlo',monospace;font-weight:700;color:var(--orange);">14 pips</span>.</div>
+          </div>
+          <div style="align-self:flex-start;background:rgba(212,184,119,0.08);border:1px solid rgba(212,184,119,0.12);border-radius:16px 16px 16px 4px;padding:10px 14px;max-width:85%;">
+            <div style="font-size:13px;color:rgba(245,240,224,0.8);line-height:1.5;">The equity swings <span style="font-family:'SF Mono','Menlo',monospace;font-weight:700;color:#ff453a;">-0.229</span> because you're giving up the flexibility of having a back checker in play. Think of it this way: <span style="color:var(--tan);font-weight:600;">you can always make the 7-point later, but you can't un-hit a blot.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4 — Daily Challenge -->
+<section class="story-section tan">
+  <div class="story-inner story-center fade-up">
+    <p class="story-eyebrow">Daily Challenge</p>
+    <h2 class="story-h2">One position a day.<br/>Every day sharper.</h2>
+    <p class="story-body">A fresh cube decision challenge every morning. Double, take, or pass — then see how your judgment compares to the world's strongest engine. Build the habit that builds the player.</p>
+
+    <div class="feat-grid fade-up fade-up-d2">
+      <div class="feat-card" style="background:var(--white);border-color:#e5e5ea;">
+        <div class="feat-card-icon" style="background:linear-gradient(135deg,#E8853A,#C96E2A);">
+          <span style="font-size:18px;">📦</span>
+        </div>
+        <h4 style="color:var(--dark);">Cube Decisions</h4>
+        <p style="color:var(--text-secondary);">Double/take/pass scenarios powered by real game positions and GNU analysis.</p>
+      </div>
+      <div class="feat-card" style="background:var(--white);border-color:#e5e5ea;">
+        <div class="feat-card-icon" style="background:linear-gradient(135deg,#D4B877,#B89B5E);">
+          <span style="font-size:18px;">📊</span>
+        </div>
+        <h4 style="color:var(--dark);">Progress Tracking</h4>
+        <p style="color:var(--text-secondary);">Streaks, accuracy trends, and skill ratings that show exactly where you're improving.</p>
+      </div>
+      <div class="feat-card" style="background:var(--white);border-color:#e5e5ea;">
+        <div class="feat-card-icon" style="background:linear-gradient(135deg,#5E5CE6,#4A48B8);">
+          <span style="font-size:18px;">🧠</span>
+        </div>
+        <h4 style="color:var(--dark);">Spaced Repetition</h4>
+        <p style="color:var(--text-secondary);">Positions you struggle with come back more often. Mastered moves fade out. Your practice is always efficient.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="manifesto-inner fade-up">
+    <p class="manifesto-q">
+      "Existing tools are too clunky, too desktop-bound, or too joyless to sustain a daily habit.
+      We're building the <em>beautiful, mobile-first training experience</em> that backgammon deserves."
+    </p>
+    <p class="manifesto-attr">The Better Backgammon Mission</p>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works" class="story-section dark">
+  <div class="story-inner story-center fade-up">
+    <p class="story-eyebrow">How it works</p>
+    <h2 class="story-h2">From first drill<br/>to real improvement.</h2>
+    <p class="story-body">Four steps to becoming the player you know you can be.</p>
+  </div>
+  <div class="story-inner">
+    <div class="steps-grid fade-up fade-up-d1">
+      <div class="step-cell">
+        <div class="step-num">01</div>
+        <h4>Pick a Drill</h4>
+        <p>Choose from opening rolls, cube decisions, pip counting, bear-off, or positional strategy.</p>
+      </div>
+      <div class="step-cell">
+        <div class="step-num">02</div>
+        <h4>Make Your Move</h4>
+        <p>See the position. Choose the best play. Every decision builds your instincts.</p>
+      </div>
+      <div class="step-cell">
+        <div class="step-num">03</div>
+        <h4>See the Equity</h4>
+        <p>GNU analysis reveals exactly how your choice compares to optimal — and why.</p>
+      </div>
+      <div class="step-cell">
+        <div class="step-num">04</div>
+        <h4>Get Sharper</h4>
+        <p>Track your progress. Build streaks. Watch your accuracy climb week over week.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta-section">
+  <div class="cta-inner fade-up">
+    <h2>Your best game<br/>is ahead of you.</h2>
+    <p class="cta-sub">Join the waitlist. Be the first to train<br/>when we launch on iOS.</p>
+    <form class="waitlist-form" id="cta-waitlist" onsubmit="return handleWaitlist(event, this)" style="margin:0 auto;">
+      <input type="email" name="email" placeholder="Enter your email" required autocomplete="email" />
+      <button type="submit" class="btn-tan">Join the Waitlist</button>
+    </form>
+    <p class="waitlist-msg" id="cta-waitlist-msg"></p>
+    <p class="cta-fine">Free to download &middot; iOS 17+ &middot; Launching 2026</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-copy">Copyright &copy; 2026 Better Backgammon. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms of Service</a>
+      <a href="/support.html">Support</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll-triggered fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('#hero .fade-up').forEach(el => {
+    setTimeout(() => el.classList.add('visible'), 100);
+  });
+
+  document.querySelectorAll('.story-section .fade-up, #announce .fade-up, #manifesto .fade-up, #cta-section .fade-up').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Waitlist handler
+  async function handleWaitlist(e, form) {
+    e.preventDefault();
+    const email = form.email.value.trim();
+    const msgId = form.id === 'hero-waitlist' ? 'hero-waitlist-msg' : 'cta-waitlist-msg';
+    const msgEl = document.getElementById(msgId);
+    const btn = form.querySelector('button');
+
+    btn.disabled = true;
+    btn.textContent = 'Joining...';
+    msgEl.className = 'waitlist-msg';
+    msgEl.textContent = '';
+
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        msgEl.textContent = data.message || "You're on the list!";
+        msgEl.className = 'waitlist-msg success';
+        form.email.value = '';
+      } else {
+        msgEl.textContent = data.error || 'Something went wrong.';
+        msgEl.className = 'waitlist-msg error';
+      }
+    } catch {
+      msgEl.textContent = 'Network error. Please try again.';
+      msgEl.className = 'waitlist-msg error';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Join the Waitlist';
+    return false;
+  }
+</script>
+
+</body>
+</html>

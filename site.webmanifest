@@ -1,0 +1,13 @@
+{
+  "name": "Better Backgammon",
+  "short_name": "BetterBG",
+  "description": "Master backgammon through targeted drills, cube decisions, and AI coaching.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#D4B877",
+  "theme_color": "#2D2D2D",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
