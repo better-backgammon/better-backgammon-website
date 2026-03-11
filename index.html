@@ -370,20 +370,13 @@
     }
     .footer-links a:hover { color: var(--tan); }
 
-    /* RESPONSIVE */
+    /* RESPONSIVE — Tablet / small desktop */
     @media (max-width: 734px) {
-      #hero h1 { font-size: 40px; }
-      .hero-sub { font-size: 18px; }
-      .waitlist-form { flex-direction: column; }
-      .story-h2 { font-size: 32px; }
-      .story-h3 { font-size: 28px; }
-      .story-split { grid-template-columns: 1fr; gap: 40px; }
-      .story-split.flip .story-text { order: 0; }
-      .feat-grid { grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: 1fr 1fr; }
-      .strip-inner { gap: 24px; }
-      .strip-div { display: none; }
-      .nav-hamburger { display: flex; }
+      /* NAV — Hamburger menu */
+      .nav-hamburger {
+        display: flex;
+        min-width: 44px; min-height: 44px; /* touch target */
+      }
       nav ul {
         display: none; position: absolute; top: 48px; left: 0; right: 0;
         flex-direction: column; gap: 0; padding: 8px 0;
@@ -393,21 +386,140 @@
         border-bottom: 1px solid rgba(212,184,119,0.1);
       }
       nav.nav-open ul { display: flex; }
+      nav ul li { border-bottom: 1px solid rgba(212,184,119,0.06); }
+      nav ul li:last-child { border-bottom: none; }
       nav ul a {
         font-size: 16px; display: block;
-        padding: 12px 22px;
+        padding: 14px 22px; /* 44px+ touch target with line-height */
+        min-height: 44px;
       }
       .nav-cta {
         display: none; position: absolute; top: auto; left: 22px; right: 22px;
-        text-align: center; margin: 0; padding: 10px 14px; font-size: 16px;
+        text-align: center; margin: 0; padding: 12px 14px; font-size: 16px;
+        min-height: 44px;
       }
       nav.nav-open .nav-cta {
         display: block; position: relative; left: auto; right: auto;
         margin: 4px 22px 12px;
       }
-      #cta-section h2 { font-size: 32px; }
+
+      /* HERO */
+      #hero { padding: 100px 22px 60px; min-height: auto; }
+      #hero h1 { font-size: 40px; }
+      .hero-sub { font-size: 18px; }
+      .waitlist-form input { min-height: 48px; font-size: 16px; } /* prevent iOS zoom */
+      .btn-tan { min-height: 48px; }
+
+      /* ANNOUNCE STRIP */
+      .strip-inner { gap: 20px; }
+      .strip-div { display: none; }
+      .strip-val { font-size: 24px; }
+
+      /* STORY SECTIONS — reduced padding */
+      .story-section { padding: 64px 22px; }
+      .story-h2 { font-size: 32px; }
+      .story-h3 { font-size: 28px; }
+      .story-body { font-size: 17px; margin-bottom: 32px; }
+      .story-p { font-size: 16px; }
+
+      /* SPLIT LAYOUT — stack on mobile */
+      .story-split { grid-template-columns: 1fr; gap: 32px; }
+      .story-split.flip .story-text { order: 0; }
+
+      /* DRILL VISUAL — constrain width */
+      .drill-visual, .equity-visual { max-width: 100%; }
+
+      /* FEATURE CARDS — single column */
+      .feat-grid { grid-template-columns: 1fr; gap: 16px; }
+
+      /* HOW IT WORKS — 2 columns */
+      .steps-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+      .step-cell { padding: 24px 12px; }
+      .step-num { font-size: 36px; margin-bottom: 12px; }
+      .step-cell h4 { font-size: 16px; }
+      .step-cell p { font-size: 14px; }
+
+      /* MANIFESTO */
+      #manifesto { padding: 56px 22px; }
       .manifesto-q { font-size: 22px; }
+
+      /* CTA */
+      #cta-section { padding: 64px 22px; }
+      #cta-section h2 { font-size: 32px; }
+      .cta-sub { font-size: 17px; }
+
+      /* FOOTER */
       .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-links a { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+
+    /* RESPONSIVE — Small phones */
+    @media (max-width: 480px) {
+      /* HERO — tighter spacing */
+      #hero { padding: 80px 16px 48px; }
+      #hero h1 { font-size: 32px; }
+      .hero-sub { font-size: 16px; margin-bottom: 28px; }
+      .hero-icon { width: 64px; height: 64px; border-radius: 16px; margin-bottom: 20px; }
+      .eyebrow { font-size: 12px; margin-bottom: 12px; }
+
+      /* WAITLIST — stack vertically */
+      .waitlist-form { flex-direction: column; gap: 10px; }
+      .waitlist-form input { width: 100%; }
+      .btn-tan { width: 100%; }
+
+      /* ANNOUNCE */
+      #announce { padding: 20px 16px; }
+      .strip-inner { gap: 16px; justify-content: space-around; }
+      .strip-item { min-width: 70px; }
+      .strip-val { font-size: 22px; }
+      .strip-label { font-size: 11px; }
+
+      /* STORY SECTIONS */
+      .story-section { padding: 48px 16px; }
+      .story-h2 { font-size: 28px; }
+      .story-h3 { font-size: 24px; }
+      .story-body { font-size: 16px; margin-bottom: 28px; }
+      .story-p { font-size: 15px; }
+
+      /* SPLIT — tighter gap */
+      .story-split { gap: 24px; }
+
+      /* DRILL VISUAL — tighter padding */
+      .drill-visual { padding: 16px; border-radius: 18px; }
+      .equity-visual { padding: 16px; border-radius: 18px; }
+
+      /* FEATURE CARDS */
+      .feat-grid { margin-top: 32px; }
+      .feat-card { padding: 22px 20px; border-radius: 16px; }
+
+      /* HOW IT WORKS — single column */
+      .steps-grid { grid-template-columns: 1fr; gap: 8px; }
+      .step-cell { padding: 20px 16px; }
+      .step-num { font-size: 32px; margin-bottom: 8px; }
+
+      /* MANIFESTO */
+      #manifesto { padding: 44px 16px; }
+      .manifesto-q { font-size: 20px; line-height: 1.35; }
+
+      /* CTA */
+      #cta-section { padding: 48px 16px; }
+      #cta-section h2 { font-size: 28px; }
+      .cta-sub { font-size: 16px; }
+
+      /* NAV dropdown padding */
+      nav ul a { padding: 14px 16px; }
+      nav.nav-open .nav-cta { margin: 4px 16px 12px; }
+    }
+
+    /* RESPONSIVE — Very small phones (320px) */
+    @media (max-width: 360px) {
+      #hero h1 { font-size: 28px; }
+      .hero-sub { font-size: 15px; }
+      .story-h2 { font-size: 24px; }
+      .story-h3 { font-size: 22px; }
+      .manifesto-q { font-size: 18px; }
+      #cta-section h2 { font-size: 24px; }
+      .strip-inner { flex-direction: column; gap: 12px; }
     }
   </style>
 </head>
@@ -708,6 +820,13 @@
 
   document.querySelectorAll('.story-section .fade-up, #announce .fade-up, #manifesto .fade-up, #cta-section .fade-up').forEach(el => {
     observer.observe(el);
+  });
+
+  // Close mobile nav when a link is tapped
+  document.querySelectorAll('nav ul a, .nav-cta').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelector('nav').classList.remove('nav-open');
+    });
   });
 
   // Waitlist handler
