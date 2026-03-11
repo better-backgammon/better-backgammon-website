@@ -30,6 +30,10 @@
     .nav-logo {
       font-size: 15px; font-weight: 700; color: #D4B877;
       text-decoration: none; letter-spacing: -0.02em;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-logo-icon {
+      width: 20px; height: 20px; border-radius: 6px;
     }
     nav .nav-links { display: flex; gap: 28px; list-style: none; }
     nav .nav-links a {
@@ -96,7 +100,7 @@
 <body>
   <nav>
     <div class="nav-inner">
-      <a href="/" class="nav-logo">Better Backgammon</a>
+      <a href="/" class="nav-logo"><img src="/favicon-32x32.png" alt="" class="nav-logo-icon">Better Backgammon</a>
       <ul class="nav-links">
         <li><a href="/">Features</a></li>
         <li><a href="/privacy.html">Privacy</a></li>
